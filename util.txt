@@ -1,0 +1,37 @@
+// i have setup the back end with node with express
+
+Front end:
+i have installed React --> npx create-react-app . --template typescript,
+react router dom --> npm install react-router-dom ,
+storybook --> npx storybook@latest init,
+redux ,
+material ui.
+
+to install storybook and setup the stories with the component folder follow these steps:
+
+in .storybook/main.js:
+
+import type { StorybookConfig } from "@storybook/react-webpack5";
+
+const config: StorybookConfig = {
+  stories: [
+    "../src/components/**/*.stories.@(js|jsx|ts|tsx)", // Automatically find stories in components folder
+  ],
+  addons: [
+    "@storybook/preset-create-react-app",
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions",
+    "@storybook/addon-onboarding",
+  ],
+  framework: {
+    name: "@storybook/react-webpack5",
+    options: {},
+  },
+  staticDirs: ["../public"],
+};
+
+export default config;
+
+
+and each component use the component.stories.tsx so that we dont need to setup the stories in different folder.
