@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // Target JavaScript version
+    "module": "commonjs", // Module system
+    "strict": true, // Enable all strict type checking options
+    "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "outDir": "./dist", // Output directory for compiled files
+    "rootDir": "..", // Root directory of the source files
+    "typeRoots": ["./node_modules/@types"], // Make sure this is included
+    "types": ["node", "express", "bcrypt"] // Optional but can be helpful
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
