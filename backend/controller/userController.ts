@@ -14,6 +14,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
   try {
     const data = await mySqlPool.query("SELECT * FROM users");
+    console.log("data lnth", data.length);
     if (data.length >= 1) {
       return res
         .status(404)
@@ -50,14 +51,23 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteParticularUser = async (req: Request, res: Response) => {
+export const deleteUserByEmail = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
-    const [deleteResult]: any = await mySqlPool.query(
-      "DELETE FROM users WHERE email=?",
+    const [userResult]: any = await mySqlPool.query(
+      "SELECT * FROM users WHERE email = ? ",
       [email]
     );
-    if (deleteResult.deletedRows === 0) {
+    if (userResult.length === 0) {
+      return res
+        .status(404)
+        .send({ status: "failed", messages: "user not found" });
+    }
+    const [deleteResult]: any = await mySqlPool.query(
+      "DELETE FROM users WHERE email = ? ",
+      [email]
+    );
+    if (deleteResult.affectedRows === 0) {
       res.status(404).send({ status: "failed", messages: "user not found" });
     }
     const [result]: any = await mySqlPool.query(
@@ -67,7 +77,7 @@ export const deleteParticularUser = async (req: Request, res: Response) => {
     await mySqlPool.query("ALTER TABLE users AUTO_INCREMENT=?", [maxId + 1]);
     return res
       .status(201)
-      .send({ status: "success", message: "Deleted a particular user" });
+      .send({ status: "success", message: "Deleted user by email" });
   } catch (err) {
     res.status(500).send({
       status: "failed",
@@ -87,7 +97,7 @@ export const getUsers = async (req: Request, res: Response) => {
     }
     res.status(201).send({
       status: "success",
-      message: "FOund users",
+      message: "Found users",
       users: data[0],
     });
   } catch (err) {

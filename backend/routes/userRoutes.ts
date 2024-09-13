@@ -7,16 +7,16 @@ import {
   getParticularUser,
   loginUser,
   deleteUser,
-  deleteParticularUser,
+  deleteUserByEmail,
 } from "../controller/userController";
 
 const router = express.Router();
 
-router.post("/createuser", createUser);
-router.get("/getusers", getUsers);
-router.get("/getuser/:id", getParticularUser);
+router.post("/create-user", createUser);
+router.get("/get-users", getUsers);
+router.get("/get-user/:id", getParticularUser);
 router.get("/login", loginUser);
-router.delete("/deleteusers", deleteUser);
-router.delete("/deleteParticularUser", deleteParticularUser);
+router.delete("/delete-users", deleteUser);
+router.delete("/delete-user-by-email", deleteUserByEmail);
 
 export default router;

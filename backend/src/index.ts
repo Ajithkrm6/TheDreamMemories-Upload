@@ -4,6 +4,7 @@ import colors from "colors";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import userRouter from "../routes/userRoutes";
+import uploadRouter from "../routes/uploadRoutes";
 
 // config dovenv
 dotenv.config();
@@ -21,6 +22,7 @@ app.get("/home", (req, res) => {
 });
 
 app.use("/api", userRouter);
+app.use("/api/images", uploadRouter);
 
 let PORT = parseInt(process.env.PORT || "8081", 10);
 
