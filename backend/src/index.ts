@@ -5,11 +5,16 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import userRouter from "../routes/userRoutes";
 import uploadRouter from "../routes/uploadRoutes";
-
+import cors from "cors";
 // config dovenv
 dotenv.config();
 
 const app = express();
+app.use(
+  cors({
+    origin: process.env.FRONT_END_URL || "http://localhost:3000",
+  })
+);
 
 // middleware
 app.use(morgan("dev"));
@@ -17,7 +22,7 @@ app.use(express.json());
 
 // routes
 
-app.get("/home", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).send("<h1>hello home</h1>");
 });
 

@@ -13,13 +13,13 @@ export const createUser = async (req: Request, res: Response) => {
     return res.status(400).send("All fields are required");
   }
   try {
-    const data = await mySqlPool.query("SELECT * FROM users");
-    console.log("data lnth", data.length);
-    if (data.length >= 1) {
-      return res
-        .status(404)
-        .send({ status: "failed", message: "Only one user is allowed" });
-    }
+    // const data = await mySqlPool.query("SELECT * FROM users");
+    // console.log("data lnth", data.length);
+    // if (data.length >= 1) {
+    //   return res
+    //     .status(404)
+    //     .send({ status: "failed", message: "Only one user is allowed" });
+    // }
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await mySqlPool.query(
@@ -134,7 +134,7 @@ export const getParticularUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res.status(404).send({
+    return res.status(404).send({
       status: "failed",
       messsage: "Need email and passsword.",
     });

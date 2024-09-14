@@ -6,7 +6,7 @@ import path from "path";
 import fs from "fs";
 
 export const postImages = async (req: Request, res: Response) => {
-  upload.array("images")(req, res, async (err: any) => {
+  upload.array("image_url")(req, res, async (err: any) => {
     if (err) {
       return res.status(500).send({ status: "failed", message: err });
     }
@@ -57,21 +57,21 @@ export const postImages = async (req: Request, res: Response) => {
 
     try {
       const [result]: any = await mySqlPool.query(query, [values]);
-      //   files.forEach((file) => {
-      //     const filePath = path.join(
-      //       __dirname,
-      //       "../uploads",
-      //       category,
-      //       file.filename
-      //     );
-      //     fs.unlink(filePath, (error) => {
-      //       if (error) {
-      //         console.error(error);
-      //       } else {
-      //         console.log("Deleted file : ", filePath);
-      //       }
-      //     });
-      //   });
+      files.forEach((file) => {
+        const filePath = path.join(
+          __dirname,
+          "../uploads",
+          category,
+          file.filename
+        );
+        fs.unlink(filePath, (error) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log("Deleted file : ", filePath);
+          }
+        });
+      });
 
       return res.status(201).send({
         status: "success",
