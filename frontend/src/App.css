@@ -1,0 +1,110 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../public/fonts/Roboto/Roboto-Regular.ttf) format("truetype");
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "SingleDay";
+  src: url(../public/fonts/SingleDay/SingleDay-Regular.ttf) format("truetype");
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "TitiliumWeb";
+  src: url(../public/fonts/TiltiliumWeb/TitilliumWeb-Regular.ttf)
+    format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "ProtestRev";
+  src: url(../public/fonts/ProtestRevolution/ProtestRevolution-Regular.ttf)
+    format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ProtestRiot";
+  src: url(../public/fonts/ProtestRiot/ProtestRiot-Regular.ttf)
+    format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: "PlexReg";
+  src: url(../public/fonts/PlexMono/IBMPlexMono-Regular.ttf) format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PlexBold";
+  src: url(../public/fonts/PlexMono/IBMPlexMono-Bold.ttf) format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PromptReg";
+  src: url(../public/fonts/Prompt/Prompt-Regular.ttf) format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PromptSemiBold";
+  src: url(../public/fonts/Prompt/Prompt-SemiBold.ttf) format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PromptBold";
+  src: url(../public/fonts/Prompt/Prompt-Bold.ttf) format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}

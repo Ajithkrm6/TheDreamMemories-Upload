@@ -19,16 +19,16 @@ logs/**/*.log
 # Frontend-specific ignore patterns
 frontend/node_modules/
 frontend/.env
-frontend/.next/
-frontend/.nuxt/
-frontend/dist/
-frontend/build/
-frontend/out/
-frontend/.parcel-cache/
-frontend/.sass-cache/
-frontend/.eslintcache
-frontend/.cache/
-frontend/.vuepress/dist
+# frontend/.next/
+# frontend/.nuxt/
+# frontend/dist/
+# frontend/build/
+# frontend/out/
+# frontend/.parcel-cache/
+# frontend/.sass-cache/
+# frontend/.eslintcache
+# frontend/.cache/
+# frontend/.vuepress/dist
 
 # Backend-specific ignore patterns
 backend/node_modules/
