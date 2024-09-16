@@ -13,12 +13,7 @@ export const postImages = async (req: Request, res: Response) => {
     const category = req.body.category;
     const description = req.body.description;
     const client_name = req.body.client_name;
-
     const files = req.files as Express.Multer.File[];
-
-    console.log("category", category);
-    console.log("description", description);
-    console.log("client_name", client_name);
 
     if (!files || files.length === 0) {
       return res
