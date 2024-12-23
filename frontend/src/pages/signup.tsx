@@ -60,8 +60,7 @@ export const SignupScreen = () => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          alignContent="center"
-          bgcolor="red"
+          alignContent="center"  
         >
           <MotionGrid
             item
