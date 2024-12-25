@@ -23,7 +23,7 @@ import {
 
 export const HomeScreen = () => {
   const [loader, setLoader] = useState(true);
-  const [category, setCatory] = useState("Wedding");
+  const [category, setCatory] = useState("");
   const [files, setFiles] = useState<FileList | null>(null);
   const [details, setDetails] = useState({
     description: "",
@@ -43,12 +43,9 @@ export const HomeScreen = () => {
     "Parties",
   ];
 
-  const handleDesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDetails((prev) => ({ ...prev, description: e.target.value }));
-  };
-
-  const handleClientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDetails((prev) => ({ ...prev, client_name: e.target.value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setDetails((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +66,7 @@ export const HomeScreen = () => {
       formData.append("category", category);
       Array.from(files).forEach((file) => {
         console.log("selected files : ", file);
-        formData.append("images", file);
+        formData.append("image_url", file);
       });
       formData.append("description", details.description);
       formData.append("client_name", details.client_name);
@@ -78,16 +75,16 @@ export const HomeScreen = () => {
           "/api/images/post-images",
           formData
         );
-        console.log(response);
+        setDetails({ description: "", client_name: "" });
+        setFiles(null);
+        if (inputRef.current) {
+          inputRef.current.value = "";
+        }
       } catch (err) {
         console.error("error fron home handle submit", err);
       }
     }
     console.log("hello");
-    setFiles(null);
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
   };
 
   useEffect(() => {
@@ -118,7 +115,9 @@ export const HomeScreen = () => {
         }}
       >
         <MotionGrid display="flex" justifyContent="center" paddingTop="15px">
-          <AnimatedTypography>TDM_Upload</AnimatedTypography>
+          <AnimatedTypography fontFamily="PromptSemiBold">
+            TDM_Upload
+          </AnimatedTypography>
         </MotionGrid>
 
         <MotionGrid
@@ -147,6 +146,13 @@ export const HomeScreen = () => {
               style={{ width: "100%", minWidth: "220px" }}
               value={category}
               onChange={changeCategory}
+              displayEmpty
+              renderValue={(selected) => {
+                if (selected.length === 0) {
+                  return <em>Select Category</em>; // Placeholder text
+                }
+                return selected;
+              }}
             >
               {catgoriesList.map((item, index) => {
                 return (
@@ -171,9 +177,10 @@ export const HomeScreen = () => {
             </Typography>
             <OutlinedInput
               fullWidth
+              name="client_name"
               sx={{ minWidth: "220px" }}
               value={details.client_name}
-              onChange={handleClientChange}
+              onChange={handleChange}
             />
           </MotionGrid>
         </MotionGrid>
@@ -222,7 +229,9 @@ export const HomeScreen = () => {
             </Typography>
             <TextField
               fullWidth
-              onChange={handleDesChange}
+              name="description"
+              value={details.description}
+              onChange={handleChange}
               multiline
               rows={3}
               sx={{

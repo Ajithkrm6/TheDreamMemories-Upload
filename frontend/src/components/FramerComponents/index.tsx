@@ -4,7 +4,7 @@ import { Grid, Button, Typography } from "@mui/material";
 import { GridProps } from "@mui/material";
 import { forwardRef } from "react";
 
-export const MotionGrid = motion(
+export const MotionGrid = motion.create(
   forwardRef<HTMLDivElement, GridProps>(function GridMotion(props, ref) {
     return <Grid {...props} ref={ref} />;
   })
@@ -14,13 +14,13 @@ const ForwardedButton = forwardRef<HTMLButtonElement, any>((props, ref) => (
   <Button {...props} ref={ref} />
 ));
 
-export const AnimatedButton = motion(ForwardedButton);
+export const AnimatedButton = motion.create(ForwardedButton);
 
 const ForwardedTypography = forwardRef<HTMLSpanElement, any>((props, ref) => {
   return <Typography {...props} ref={ref} />;
 });
 
-export const AnimatedTypography = motion(ForwardedTypography);
+export const AnimatedTypography = motion.create(ForwardedTypography);
 
 export const AnimatedGrid = () => {
   return (

@@ -11,7 +11,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/home" element={<HomeScreen />} />
+        <Route path="/upload" element={<HomeScreen />} />
         <Route path="/main" element={<MainScreen />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/signup" element={<SignupScreen />} />

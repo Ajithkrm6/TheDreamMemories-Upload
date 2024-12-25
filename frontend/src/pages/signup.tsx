@@ -1,59 +1,93 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  Grid,
-  OutlinedInput,
-  Typography,
-  Box,
-  Button,
-  useMediaQuery,
-} from "@mui/material";
+import { OutlinedInput, Typography, useMediaQuery } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { AnimatedTypography, MotionGrid } from "../components/FramerComponents";
+import {
+  AnimatedTypography,
+  MotionGrid,
+  AnimatedButton,
+} from "../components/FramerComponents";
+import Api from "../Api";
 
 export const SignupScreen = () => {
-  const [user, setUser] = useState({
+  const initialState = {
     username: "",
     email: "",
-    mobile: "",
     password: "",
     bio: "",
-    social_links: {},
-  });
+    social_links: {
+      facebook: "",
+      instagram: "",
+    },
+  };
+  const [user, setUser] = useState(initialState);
   const navigate = useNavigate();
   const isXs = useMediaQuery("(max-width:600px)"); // Extra small screens (phones)
   const isSm = useMediaQuery("(max-width:960px)"); // Small screens (tablets)
   const isMd = useMediaQuery("(max-width:1280px)"); // Medium screens (small laptops)
   const isLg = useMediaQuery("(max-width:1920px)");
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser((prev) => ({
-      ...prev,
-      email: e.target.value,
-    }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser((prevState: any) => {
+      const [field, nestedField] = name.split("."); // name = "social_link.facebook" ?, it splits into ["social_link","facebook"]
+      // now field = social_link, nestedField = facebook
+
+      if (nestedField) {
+        return {
+          ...prevState, // coping the state
+          [field]: {
+            //  from state we are spreaidng field like social_link
+            ...prevState[field], // coping existing object like {facebook:"", instagram}
+            [nestedField]: value, // now updating state like facebook = value from input.
+          },
+        };
+      } else {
+        return {
+          ...prevState,
+          [field]: value,
+        };
+      }
+    });
   };
 
-  const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser((prev) => ({ ...prev, password: e.target.value }));
+  const handleSubmit = async (e: any) => {
+    if (
+      user.username === "" ||
+      user.email === "" ||
+      user.password === "" ||
+      user.bio === "" ||
+      user.social_links.facebook === "" ||
+      user.social_links.instagram === ""
+    )
+      return;
+    const response = await Api.postData("/api/create-user", user);
+    if (response) {
+      console.log(response);
+      setUser(initialState);
+      navigate("/login");
+    }
   };
 
   return (
-    <MotionGrid style={mainContainer} sm={12}>
+    <MotionGrid style={mainContainer}>
       <MotionGrid
         sm={12}
         style={{
-          width: isXs ? "80%" : isSm ? "50%" : isMd ? "35" : "35%",
-          height: isSm ? "45%" : isMd ? "45%" : "60%",
+          padding: "15px",
+          width: isXs ? "80%" : isSm ? "60%" : isMd ? "60%" : "45%",
+          height: "auto",
           borderRadius: "12px",
           backgroundColor: "#ffffff",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          // justifyContent: "center",
+          // alignItems: "center",
         }}
       >
-        <AnimatedTypography>TDM_Upload</AnimatedTypography>
+        <MotionGrid display="flex" justifyContent="center" paddingTop="15px">
+          <AnimatedTypography>TDM_Upload</AnimatedTypography>
+        </MotionGrid>
+
         <MotionGrid
           padding="15px"
           container
@@ -61,7 +95,7 @@ export const SignupScreen = () => {
           justifyContent="center"
           alignItems="center"
           alignContent="center"
-          bgcolor="red"
+          spacing={2}
         >
           <MotionGrid
             item
@@ -72,11 +106,17 @@ export const SignupScreen = () => {
             flexDirection="column"
             alignItems="center"
           >
-            <Box>
-              <Typography textAlign="start">User Name</Typography>
-            </Box>
+            <Typography sx={{ width: "100%" }} textAlign="start">
+              Username
+            </Typography>
 
-            <OutlinedInput value={user.email} onChange={handleEmailChange} />
+            <OutlinedInput
+              fullWidth
+              name="username"
+              sx={{ minWidth: "220px" }}
+              value={user.username}
+              onChange={handleChange}
+            />
           </MotionGrid>
           <MotionGrid
             item
@@ -87,9 +127,133 @@ export const SignupScreen = () => {
             flexDirection="column"
             alignItems="center"
           >
-            <Typography>User Name</Typography>
-            <OutlinedInput value={user.email} onChange={handleEmailChange} />
+            <Typography sx={{ width: "100%" }} textAlign="start">
+              Email
+            </Typography>
+
+            <OutlinedInput
+              fullWidth
+              name="email"
+              sx={{ minWidth: "220px" }}
+              value={user.email}
+              onChange={handleChange}
+            />
           </MotionGrid>
+        </MotionGrid>
+        <MotionGrid
+          padding="15px"
+          container
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          alignContent="center"
+          spacing={2}
+        >
+          <MotionGrid
+            item
+            sm={12}
+            md={6}
+            display="flex"
+            justifyContent="center"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <Typography sx={{ width: "100%" }} textAlign="start">
+              Password
+            </Typography>
+
+            <OutlinedInput
+              fullWidth
+              name="password"
+              sx={{ minWidth: "220px" }}
+              value={user.password}
+              onChange={handleChange}
+            />
+          </MotionGrid>
+          <MotionGrid
+            item
+            sm={12}
+            md={6}
+            display="flex"
+            justifyContent="center"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <Typography sx={{ width: "100%" }} textAlign="start">
+              Bio
+            </Typography>
+
+            <OutlinedInput
+              fullWidth
+              name="bio"
+              sx={{ minWidth: "220px" }}
+              value={user.bio}
+              onChange={handleChange}
+            />
+          </MotionGrid>
+        </MotionGrid>
+
+        <MotionGrid
+          padding="15px"
+          container
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          alignContent="center"
+          spacing={2}
+        >
+          <MotionGrid
+            item
+            sm={12}
+            md={6}
+            display="flex"
+            justifyContent="center"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <Typography sx={{ width: "100%" }} textAlign="start">
+              Facebook Link
+            </Typography>
+
+            <OutlinedInput
+              fullWidth
+              name="social_links.facebook"
+              sx={{ minWidth: "220px" }}
+              value={user.social_links.facebook}
+              onChange={handleChange}
+            />
+          </MotionGrid>
+          <MotionGrid
+            item
+            sm={12}
+            md={6}
+            display="flex"
+            justifyContent="center"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <Typography sx={{ width: "100%" }} textAlign="start">
+              Instagram Link
+            </Typography>
+
+            <OutlinedInput
+              fullWidth
+              name="social_links.instagram"
+              sx={{ minWidth: "220px" }}
+              value={user.social_links.instagram}
+              onChange={handleChange}
+            />
+          </MotionGrid>
+        </MotionGrid>
+        <MotionGrid display="flex" justifyContent="center">
+          <AnimatedButton
+            variant="contained"
+            ripple={false}
+            type="submit"
+            onClick={handleSubmit}
+          >
+            Submit
+          </AnimatedButton>
         </MotionGrid>
       </MotionGrid>
     </MotionGrid>
@@ -104,81 +268,3 @@ const mainContainer = {
   alignItems: "center",
   display: "flex",
 };
-
-{
-  /* <MotionGrid style={mainContainer} sm={12}>
-<MotionGrid
-  sm={12}
-  style={{
-    width: isXs ? "80%" : isSm ? "50%" : isMd ? "35" : "35%",
-    height: isSm ? "45%" : isMd ? "45%" : "60%",
-    borderRadius: "12px",
-    backgroundColor: "#ffffff",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-  }}
->
-  <MotionGrid paddingBottom="20px" display="flex" justifyContent="center">
-    <Typography fontFamily="PromptSemiBold">
-      Login to enter Upload Env
-    </Typography>
-  </MotionGrid>
-  <MotionGrid
-    container
-    spacing={2}
-    display="flex"
-    justifyContent="center"
-    flexDirection="column"
-    alignItems="center"
-  >
-    <Grid item>
-      <Typography>Email</Typography>
-      <OutlinedInput value={user.email} onChange={handleEmailChange} />
-    </Grid>
-    <Grid item>
-      <Typography>Password</Typography>
-      <OutlinedInput
-        type="password"
-        value={user.password}
-        onChange={passwordHandler}
-      />
-      <Typography>{user.password}</Typography>
-      <Grid
-        item
-        display="flex"
-        justifyContent="center"
-        paddingTop="10px"
-        paddingBottom="10px"
-      >
-        <AnimatedButton
-          variant="contained"
-          onClick={handleSubmit}
-          whileTap={{ scale: 0.9 }}
-          ripple={false}
-        >
-          Submit
-        </AnimatedButton>
-      </Grid>
-      <MotionGrid
-        item
-        display="flex"
-        justifyContent="center"
-        flexDirection="column"
-        alignItems={"center"}
-      >
-        <TypeWritter
-          text="No Account yet?"
-          speed={50}
-          routeTo="/signup"
-          linkText="signup"
-          linkStyleObj={{ textAlign: "center", color: "#6439FF" }}
-        />
-      </MotionGrid>
-    </Grid>
-  </MotionGrid>
-</MotionGrid>
-</MotionGrid>
-); */
-}

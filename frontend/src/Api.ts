@@ -15,7 +15,10 @@ export default {
       options.body = JSON.stringify(data);
     }
     try {
-      const response = await fetch(process.env.BASEURL + url, options);
+      const response = await fetch(
+        process.env.REACT_APP_BASE_URL + url,
+        options
+      );
       if (!response) {
         console.log("No response");
       }
