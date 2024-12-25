@@ -95,6 +95,7 @@ export const SignupScreen = () => {
           justifyContent="center"
           alignItems="center"
           alignContent="center"
+          spacing={2}
         >
           <MotionGrid
             item
@@ -164,6 +165,7 @@ export const SignupScreen = () => {
             <OutlinedInput
               fullWidth
               name="password"
+              type="password"
               sx={{ minWidth: "220px" }}
               value={user.password}
               onChange={handleChange}

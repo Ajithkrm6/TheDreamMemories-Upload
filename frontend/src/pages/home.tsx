@@ -20,6 +20,7 @@ import {
   AnimatedButton,
   AnimatedTypography,
 } from "../components/FramerComponents";
+import { Header } from "../components/Header";
 
 export const HomeScreen = () => {
   const [loader, setLoader] = useState(true);
@@ -99,173 +100,181 @@ export const HomeScreen = () => {
   }, [category]);
 
   return (
-    <MotionGrid style={mainContainer} sm={12}>
+    <>
+      <Header />
       <MotionGrid
+        style={mainContainer}
         sm={12}
-        style={{
-          padding: "15px",
-          width: isXs ? "80%" : isSm ? "60%" : isMd ? "60%" : "45%",
-          height: "auto",
-          borderRadius: "12px",
-          backgroundColor: "#ffffff",
-          display: "flex",
-          flexDirection: "column",
-          // justifyContent: "center",
-          // alignItems: "center",
-        }}
+        display="flex"
+        flexDirection="column"
       >
-        <MotionGrid display="flex" justifyContent="center" paddingTop="15px">
-          <AnimatedTypography fontFamily="PromptSemiBold">
-            TDM_Upload
-          </AnimatedTypography>
-        </MotionGrid>
-
         <MotionGrid
-          padding="15px"
-          container
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          alignContent="center"
-          spacing={2}
+          sm={12}
+          style={{
+            padding: "15px",
+            width: isXs ? "80%" : isSm ? "60%" : isMd ? "60%" : "45%",
+            height: "auto",
+            borderRadius: "12px",
+            backgroundColor: "#ffffff",
+            display: "flex",
+            flexDirection: "column",
+            // justifyContent: "center",
+            // alignItems: "center",
+          }}
         >
+          <MotionGrid display="flex" justifyContent="center" paddingTop="15px">
+            <AnimatedTypography fontFamily="PromptSemiBold">
+              TDM_Upload
+            </AnimatedTypography>
+          </MotionGrid>
+
           <MotionGrid
-            item
-            sm={12}
-            md={6}
+            padding="15px"
+            container
             display="flex"
             justifyContent="center"
-            flexDirection="column"
             alignItems="center"
+            alignContent="center"
+            spacing={2}
           >
-            <Typography sx={{ width: "100%" }} textAlign="start">
-              Category
-            </Typography>
-
-            <Select
-              style={{ width: "100%", minWidth: "220px" }}
-              value={category}
-              onChange={changeCategory}
-              displayEmpty
-              renderValue={(selected) => {
-                if (selected.length === 0) {
-                  return <em>Select Category</em>; // Placeholder text
-                }
-                return selected;
-              }}
+            <MotionGrid
+              item
+              sm={12}
+              md={6}
+              display="flex"
+              justifyContent="center"
+              flexDirection="column"
+              alignItems="center"
             >
-              {catgoriesList.map((item, index) => {
-                return (
-                  <MenuItem key={index} value={item}>
-                    {item}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+              <Typography sx={{ width: "100%" }} textAlign="start">
+                Category
+              </Typography>
+
+              <Select
+                style={{ width: "100%", minWidth: "220px" }}
+                value={category}
+                onChange={changeCategory}
+                displayEmpty
+                renderValue={(selected) => {
+                  if (selected.length === 0) {
+                    return <em>Select Category</em>; // Placeholder text
+                  }
+                  return selected;
+                }}
+              >
+                {catgoriesList.map((item, index) => {
+                  return (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </MotionGrid>
+            <MotionGrid
+              item
+              sm={12}
+              md={6}
+              display="flex"
+              justifyContent="center"
+              flexDirection="column"
+              alignItems="center"
+            >
+              <Typography sx={{ width: "100%" }} textAlign="start">
+                Client Name
+              </Typography>
+              <OutlinedInput
+                fullWidth
+                name="client_name"
+                sx={{ minWidth: "220px" }}
+                value={details.client_name}
+                onChange={handleChange}
+              />
+            </MotionGrid>
+          </MotionGrid>
+          <MotionGrid container display="flex" justifyContent="center">
+            <MotionGrid item padding="15px" md={12} sm={12}>
+              <OutlinedInput
+                fullWidth
+                sx={{
+                  padding: "10px",
+                  borderStyle: "dashed", // Set the dashed border
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "inherit", // Keep the original border color on hover
+                    borderStyle: "dashed", // Ensure it stays dashed on hover
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderStyle: "dashed", // Ensure the default state is also dashed
+                  },
+                }}
+                type="file"
+                onChange={handleFileChange}
+                inputProps={{ multiple: true }}
+                inputRef={inputRef}
+              />
+            </MotionGrid>
           </MotionGrid>
           <MotionGrid
-            item
-            sm={12}
-            md={6}
+            container
+            padding="10px"
             display="flex"
-            justifyContent="center"
-            flexDirection="column"
-            alignItems="center"
-          >
-            <Typography sx={{ width: "100%" }} textAlign="start">
-              Client Name
-            </Typography>
-            <OutlinedInput
-              fullWidth
-              name="client_name"
-              sx={{ minWidth: "220px" }}
-              value={details.client_name}
-              onChange={handleChange}
-            />
-          </MotionGrid>
-        </MotionGrid>
-        <MotionGrid container display="flex" justifyContent="center">
-          <MotionGrid item padding="15px" md={12} sm={12}>
-            <OutlinedInput
-              fullWidth
-              sx={{
-                padding: "10px",
-                borderStyle: "dashed", // Set the dashed border
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "inherit", // Keep the original border color on hover
-                  borderStyle: "dashed", // Ensure it stays dashed on hover
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderStyle: "dashed", // Ensure the default state is also dashed
-                },
-              }}
-              type="file"
-              onChange={handleFileChange}
-              inputProps={{ multiple: true }}
-              inputRef={inputRef}
-            />
-          </MotionGrid>
-        </MotionGrid>
-        <MotionGrid
-          container
-          padding="10px"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          alignContent="center"
-        >
-          <MotionGrid
-            item
-            sm={12}
-            md={12}
-            display="flex"
-            flexDirection="column"
             justifyContent="center"
             alignItems="center"
             alignContent="center"
           >
-            <Typography sx={{ width: "100%" }} textAlign="start">
-              Description
-            </Typography>
-            <TextField
-              fullWidth
-              name="description"
-              value={details.description}
-              onChange={handleChange}
-              multiline
-              rows={3}
-              sx={{
-                "& .MuiInputBase-input": {
-                  minWidth: isXs
-                    ? "180px"
-                    : isSm
+            <MotionGrid
+              item
+              sm={12}
+              md={12}
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              alignContent="center"
+            >
+              <Typography sx={{ width: "100%" }} textAlign="start">
+                Description
+              </Typography>
+              <TextField
+                fullWidth
+                name="description"
+                value={details.description}
+                onChange={handleChange}
+                multiline
+                rows={3}
+                sx={{
+                  "& .MuiInputBase-input": {
+                    minWidth: isXs
                       ? "180px"
-                      : isMd
-                        ? "300px"
-                        : "", // Set the height of the input element
-                  padding: "0 14px", // Adjust padding to fit the height properly
-                },
-              }}
-            />
+                      : isSm
+                        ? "180px"
+                        : isMd
+                          ? "300px"
+                          : "", // Set the height of the input element
+                    padding: "0 14px", // Adjust padding to fit the height properly
+                  },
+                }}
+              />
+            </MotionGrid>
           </MotionGrid>
-        </MotionGrid>
-        <Grid
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          alignContent="center"
-        >
-          <AnimatedButton
-            variant="contained"
-            type="submit"
-            onClick={handleSubmit}
-            whileTap={{ scale: 0.9 }}
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            alignContent="center"
           >
-            Upload
-          </AnimatedButton>
-        </Grid>
+            <AnimatedButton
+              variant="contained"
+              type="submit"
+              onClick={handleSubmit}
+              whileTap={{ scale: 0.9 }}
+            >
+              Upload
+            </AnimatedButton>
+          </Grid>
+        </MotionGrid>
       </MotionGrid>
-    </MotionGrid>
+    </>
   );
 };
 

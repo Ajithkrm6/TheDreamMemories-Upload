@@ -10,11 +10,7 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-app.use(
-  cors({
-    origin: process.env.FRONT_END_URL || "http://localhost:3000",
-  })
-);
+app.use(cors());
 
 // middleware
 app.use(morgan("dev"));
