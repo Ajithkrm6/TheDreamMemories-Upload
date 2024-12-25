@@ -2,10 +2,12 @@ import { Request, Response } from "express";
 import mySqlPool from "../config";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import jwt, { Secret } from "jsonwebtoken";
+import jwt, { Secret, VerifyErrors, JwtPayload } from "jsonwebtoken";
 
 dotenv.config();
-const JWT_Secret: Secret = process.env.JWT_SECRET || "default_Secret";
+const JWT_Secret: Secret = process.env.JWT_ACCESS_SECRET || "default_Secret";
+const REFRESH_TOKEN_JWT_SECRET: Secret =
+  process.env.JWT_REFRESH_SECRET || "default_refresh_secret";
 
 export const createUser = async (req: Request, res: Response) => {
   const { username, email, password, bio, social_links } = req.body;
@@ -108,7 +110,7 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const getParticularUser = async (req: Request, res: Response) => {
+export const getUserById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     if (!id) {
@@ -157,13 +159,29 @@ export const loginUser = async (req: Request, res: Response) => {
         .status(404)
         .send({ status: "failed", message: "Invalid username or password" });
     }
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_Secret, {
-      expiresIn: "2h",
+    const accessToken = jwt.sign(
+      { id: user.id, email: user.email },
+      JWT_Secret,
+      {
+        expiresIn: "2h",
+      }
+    );
+    const refreshToken = jwt.sign(
+      { id: user.id, email: user.email },
+      REFRESH_TOKEN_JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false, // shoule be true in production example process.env.NODE_ENV === "production";
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // max age is 1 week
     });
 
     return res
       .status(201)
-      .send({ status: "success", message: "Login successful", token });
+      .send({ status: "success", message: "Login successful", accessToken });
   } catch (err) {
     res.status(500).send({
       status: "failed",
@@ -171,3 +189,74 @@ export const loginUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+// synchronous method:
+
+export const generateNewAccessToken = (req: Request, res: Response) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res
+      .status(401)
+      .send({ status: "failed", message: "No refresh token found" });
+  }
+
+  try {
+    const decoded = jwt.verify(
+      refreshToken,
+      REFRESH_TOKEN_JWT_SECRET
+    ) as JwtPayload;
+
+    const newAccessToken = jwt.sign(
+      { id: decoded.id, email: decoded.email },
+      JWT_Secret,
+      {
+        expiresIn: "2h",
+      }
+    );
+
+    return res.status(201).send({ status: "success", newAccessToken });
+  } catch (err) {
+    return res
+      .status(401)
+      .send({ status: "failed", message: "Invalid Refresh Token" });
+  }
+};
+
+// callback based
+
+// export const generateNewAccessToken = (req: Request, res: Response) => {
+//   const refreshToken = req.cookies.refreshToken;
+//   if (!refreshToken) {
+//     return res
+//       .status(401)
+//       .send({ status: "failed", message: "No refresh token found" });
+//   }
+
+//   jwt.verify(
+//     refreshToken,
+//     REFRESH_TOKEN_JWT_SECRET,
+//     (err: VerifyErrors | null, decoded: string | JwtPayload | undefined) => {
+//       if (err) {
+//         return res
+//           .status(401)
+//           .send({ status: "failed", message: "Invalid Refresh Token" });
+//       }
+//       if (!decoded || typeof decoded === "string") {
+//         return res
+//           .status(401)
+//           .send({ status: "failed", message: "Invalid token payload" });
+//       }
+
+//       const newAccessToken = jwt.sign(
+//         { id: decoded.id, email: decoded.email },
+//         JWT_Secret,
+//         {
+//           expiresIn: "2h",
+//         }
+//       );
+
+//       return res.status(201).send({ status: "Success", newAccessToken });
+//     }
+//   );
+// };

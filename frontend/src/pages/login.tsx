@@ -10,19 +10,19 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import Api from "../Api";
+import { api } from "../services";
 import { useNavigate } from "react-router-dom";
 import { AnimatedButton, MotionGrid } from "../components/FramerComponents";
 import { Label } from "@mui/icons-material";
 import { TypeWritter } from "../components/TypeWritter";
 import { useAuth } from "../context/AuthContext";
 
-
 export const LoginScreen = () => {
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
-  const {isAuthenticated,setIsAuthenticated} = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const isXs = useMediaQuery("(max-width:600px)"); // Extra small screens (phones)
   const isSm = useMediaQuery("(max-width:960px)"); // Small screens (tablets)
@@ -38,24 +38,28 @@ export const LoginScreen = () => {
   };
 
   const handleSubmit = async () => {
-    if (user.email === "" && user.password === "") return;
-    const response = await Api.postData("/api/login", user);
+    if (!user.email && !user.password) return;
+    // const response = await Api.postData("/api/login", user);
+    const response = await api({
+      url: "/api/login",
+      method: "POST",
+      data: user,
+    });
     console.log(response);
     setUser({ email: "", password: "" });
     if (response && response.status === "success") {
+      localStorage.setItem("token", response.token);
       navigate("/home");
-      setIsAuthenticated(true);
+      login();
     }
   };
-
-  console.log(user, JSON.stringify(user));
 
   return (
     <MotionGrid style={mainContainer}>
       <MotionGrid
         style={{
           width: isXs ? "80%" : isSm ? "50%" : isMd ? "35%" : "35%",
-          height: isSm ? "45%" : isMd ? "60%" : "60%",
+          height: "60%",
           borderRadius: "12px",
           backgroundColor: "#ffffff",
           display: "flex",

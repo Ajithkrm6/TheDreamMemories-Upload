@@ -1,9 +1,15 @@
 import React from "react";
 import { AnimatedButton } from "../FramerComponents";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  const logoutHandler = () => {};
-
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const logoutHandler = () => {
+    logout();
+    navigate("/login");
+  };
   return (
     <div style={{ width: "100%" }}>
       <header
@@ -20,7 +26,7 @@ export const Header = () => {
           <h3 style={{ color: "#000000" }}>Tdm</h3>
         </div>
         <div>
-          <AnimatedButton>Logout</AnimatedButton>
+          <AnimatedButton onClick={logoutHandler}>Logout</AnimatedButton>
         </div>
       </header>
     </div>
