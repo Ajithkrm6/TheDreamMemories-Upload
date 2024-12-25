@@ -108,7 +108,7 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const getParticularUser = async (req: Request, res: Response) => {
+export const getUserById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     if (!id) {

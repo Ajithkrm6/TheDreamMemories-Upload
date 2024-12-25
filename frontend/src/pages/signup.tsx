@@ -43,7 +43,7 @@ export const SignupScreen = () => {
       <MotionGrid
         sm={12}
         style={{
-          width: isXs ? "80%" : isSm ? "50%" : isMd ? "35" : "35%",
+          width: isXs ? "80%" : isSm ? "50%" : isMd ? "35%" : "35%",
           height: isSm ? "45%" : isMd ? "45%" : "60%",
           borderRadius: "12px",
           backgroundColor: "#ffffff",
